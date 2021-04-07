@@ -26,15 +26,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      // Initialize FlutterFire:
       future: _initialization,
       builder: (context, snapshot) {
-        // Check for errors
         if (snapshot.hasError) {
           return ErrorScreen();
         }
-
-        // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
             title: 'Flutter App',
@@ -43,15 +39,9 @@ class MyApp extends StatelessWidget {
           );
         }
 
-        // Otherwise, show something whilst waiting for initialization to complete
         return LoadingScreen();
       },
     );
-    /*return MaterialApp(
-      title: 'Flutter App',
-      debugShowCheckedModeBanner: false,
-      home: MyHomeScreen(),
-    );*/
   }
 }
 
@@ -100,7 +90,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
         ),
         home: AuthenticationWrapper(),
         routes: {
-          // TODO: sredit animaciju za  minjanje ekrana
           LoginScreen.id: (context) => LoginScreen(),
           SignupScreen.id: (context) => SignupScreen(),
           HomeScreen.id: (context) => HomeScreen(),

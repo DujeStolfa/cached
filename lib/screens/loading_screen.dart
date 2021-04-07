@@ -1,3 +1,6 @@
+/// U slučaju učitavanja pojedinog Widgeta, korisniku je
+/// prikazzan indikator za učitavanje.
+
 import 'package:flutter/material.dart';
 
 class LoadingScreen extends StatelessWidget {

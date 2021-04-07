@@ -1,3 +1,10 @@
+/// Dijaloški okvir za stvaranje novog novčanika
+///
+/// Pri stvaranju novčanika korisnik unosi njegov početni
+/// iznos njegov naziv. Pdatke o trenutnom korisniku pruža
+/// Firebase Auth, dok se preko autorskog servisa obrađuju
+/// i spremaju u Cloud Firestore bazu podataka.
+
 import 'package:aplikacija/models/main_model.dart';
 import 'package:aplikacija/services/auth_service.dart';
 import 'package:aplikacija/services/firestore_service.dart';
@@ -34,7 +41,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       currentUser,
       walletNames,
     );
-    // cekat ' ono sta se vrti
+
     Navigator.pop(context);
   }
 
@@ -48,8 +55,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white.withOpacity(
-          0.92), // this is the main reason of transparency at next screen. I am ignoring rest implementation but what i have achieved is you can see.
+      backgroundColor: Colors.white.withOpacity(0.92),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 40),
         child: Column(
@@ -101,34 +107,9 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
                 ),
               ],
             )
-            /*Align(
-              alignment: Alignment.bottomRight,
-              child: Container(
-                width: 120,
-                child: RaisedButton(
-                  color: Theme.of(context).accentColor,
-                  child: Text('Done',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600)),
-                  onPressed: () => _submit(service, currentUser, walletNames),
-                ),
-              ),*/
           ],
         ),
       ),
     );
   }
-
-  /*Future<Map> getDialogData() {
-    return {
-                      'transactions': [],
-                      'id': DateTime.now().toString(),
-                      'name': 'Wallet',
-                      'currency': 'HRK',
-                      'balance': 30000.0,
-                    };
-    };
-  }*/
 }

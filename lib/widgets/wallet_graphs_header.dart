@@ -19,9 +19,6 @@ class _WalletGraphsHeaderState extends State<WalletGraphsHeader> {
   @override
   Widget build(BuildContext context) {
     QuerySnapshot walletsSnapshot = widget.snapshot;
-    /*Wallet currentWallet =
-                .createWallet(walletsSnapshot.docs.where((wallet) => wallet.id).toList()[0]);*/
-    /*Wallet currentWallet = await context.read<FirestoreService>().getWalletById(widget.selectedWallet.id, context.read<AuthenticationService>().currentUser,);*/
 
     Wallet _currentWallet = model.createWallet(walletsSnapshot.docs
         .where((element) => element.id == widget.selectedWallet.id)

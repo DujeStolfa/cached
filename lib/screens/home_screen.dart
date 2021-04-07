@@ -1,7 +1,9 @@
-import 'package:aplikacija/models/main_model.dart';
-import 'package:aplikacija/models/transaction_model.dart';
-import 'package:aplikacija/models/user_model.dart';
-import 'package:aplikacija/models/wallet_model.dart';
+/// Nadzorna ploča
+///
+/// Korisniku su na nadzornoj ploči prikazani izbonik (SpeedDial)
+/// za unos nove transakcije ili transfera, izbornik sa popisom
+/// svih korisnikovih novčanika i dijagram salda svih transakcija.
+
 import 'package:aplikacija/widgets/app_icons.dart';
 import 'package:aplikacija/widgets/graph_list.dart';
 import 'package:aplikacija/widgets/wallet_selector.dart';
@@ -19,8 +21,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  //AppUser _currentUser = model.users[1];
-
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIOverlays([]);
@@ -41,22 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
               })
         ]),
         floatingActionButton: SpeedDial(
-          // both default to 16
-          //marginRight: 18,
-          //marginBottom: 20,
-          //animatedIcon: AnimatedIcons.,
           animatedIconTheme: IconThemeData(size: 22.0),
-          // this is ignored if animatedIcon is non null
           child: Icon(Icons.add),
-          //visible: _dialVisible,
-          // If true user is forced to close dial manually
-          // by tapping main button and overlay is not rendered.
           closeManually: false,
           curve: Curves.bounceIn,
           overlayColor: Colors.black,
           overlayOpacity: 0.1,
-          //onOpen: () => print('OPENING DIAL'),
-          //onClose: () => print('DIAL CLOSED'),
           tooltip: 'Speed Dial',
           heroTag: 'speed-dial-hero-tag',
           backgroundColor: Theme.of(context).accentColor,
@@ -100,7 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView(children: [
                       Column(children: [
                         Padding(
-                            // TODO: ovo stavit u tipa subtitle widget
                             padding: EdgeInsets.symmetric(
                                 horizontal: 30.0, vertical: 14.0),
                             child: Row(
@@ -116,7 +105,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ])),
                         WalletSelector(),
                         Padding(
-                            // TODO: ovo stavit u tipa subtitle widget
                             padding: EdgeInsets.symmetric(
                                 horizontal: 30.0, vertical: 10.0),
                             child: Row(

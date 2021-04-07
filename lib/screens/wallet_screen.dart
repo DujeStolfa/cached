@@ -1,7 +1,9 @@
-import 'package:aplikacija/models/main_model.dart';
+/// Ekran pojedinog novčanika
+///
+/// Prikazano je zaglavlje sa svim podatcima o novčaniku
+/// i Widget ispisa transakcija tog novčanika.
+
 import 'package:aplikacija/models/wallet_model.dart';
-import 'package:aplikacija/services/auth_service.dart';
-import 'package:aplikacija/services/firestore_service.dart';
 import 'package:aplikacija/widgets/empty_wallet_message.dart';
 import 'package:aplikacija/widgets/transaction_list.dart';
 import 'package:aplikacija/widgets/wallet_header.dart';
@@ -22,9 +24,6 @@ class _WalletScreenState extends State<WalletScreen> {
   @override
   Widget build(BuildContext context) {
     QuerySnapshot walletsSnapshot = context.watch<QuerySnapshot>();
-    /*Wallet currentWallet =
-                .createWallet(walletsSnapshot.docs.where((wallet) => wallet.id).toList()[0]);*/
-    /*Wallet currentWallet = await context.read<FirestoreService>().getWalletById(widget.selectedWallet.id, context.read<AuthenticationService>().currentUser,);*/
 
     Wallet currentWallet = widget.selectedWallet;
 

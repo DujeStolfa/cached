@@ -1,10 +1,17 @@
+/// Klasa Transaction
+///
+/// U aplikaciji se pri rukovanju transakcijama koriste instance
+/// klase Transaction. Modul Cloud Firestore koristi se za pretvaranje
+/// datuma izvršenja transakcije iz tipa Timestamp optimiziranog za bazu
+/// podataka u tip DateTime prilagođen korištenju u ostatku aplikacije.
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Transaction {
   final String id;
   String description;
   final double value;
-  final Timestamp date; // triba bit nekakav datetime objekt
+  final Timestamp date;
   final bool expense;
   final String category;
   bool isExpanded;

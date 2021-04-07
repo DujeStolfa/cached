@@ -1,5 +1,11 @@
+/// Ekran za prijavu korisnika
+///
+/// Sadrži formu za upis odgovarajućih podataka o korisniku i
+/// funkcije pomoću kojih se osigurava ispravnost upisanih
+/// podataka. Korišteni je autorski servis za autentifikaciju
+/// i odgovarajući modul (Firebase Auth).
+
 import 'package:aplikacija/services/auth_service.dart';
-import 'package:aplikacija/services/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,25 +36,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (credential is UserCredential && _validated) {
       return null;
-      //udi u aplikaciju i to sve}
-    } else if (emailValue !=
-            null /*&&
-        credential.message ==
-            'There is no user record corresponding to this identifier. The user may have been deleted.'*/
-        ) {
+    } else if (emailValue != null) {
       return 'This email is not registered, please create an account';
-
-      /*print(credential.message);
-      switch (credential.message) {
-        case 'The password is invalid or the user does not have a password.':
-          {
-            return;
-          }
-        case 'There is no user record corresponding to this identifier. The user may have been deleted.':
-          {
-            break;
-          }
-      }*/
     } else if (passwordValue != null &&
         credential.message ==
             'The password is invalid or the user does not have a password.') {
@@ -56,49 +45,19 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     return null;
-    /*print(
-          'C r eeeeee d e n t i al  a l a  lll  l lll     l  l l llll!!!!!!!!!!!!!!');
-      print(credential);
-
-      if (credential != null) {
-        print(credential);
-        User user = credential.user;
-        print('');
-        print('');
-        print(user.uid);
-        print('');
-        context
-            .read<FirestoreService>()
-            .createUser(user, 'Vjeverica'); // ovo triba u signup......
-      }*/
   }
 
   _validateEmail(input) async {
-    /////// !!!!!!!!! dodat u bazu listu usera i tjt :///////////////1!!11111
     if (!input.contains('@')) {
       return 'Please enter a valid email';
     }
     dynamic result = await _submit(emailValue: input);
-    print('vamo gledat');
-    print(result);
+
     setState(() {
       _emailValidated = result;
     });
   }
 
-  _validatePassword(input) {}
-
-  /* _validateLoginInput() {
-    final FormState form = _formKey.currentState;
-      if (_formKey.currentState.validate()) {
-        form.save();
-        _sheetController.setState(() {
-          _loading = true;
-        });
-
-  }
-*/
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
@@ -120,23 +79,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         validator: (input) {
                           _validateEmail(input);
                           return _emailValidated;
-                          /*
-                          dynamic rezultat = _validateEmail(input);
-                          print(rezultat);
-                          print('kul');
-                          return ' fuck';*/
-                          /*{
-                          _submit(input);
-                          if (!input.contains('@')) {
-                            return 'Please enter a valid email';
-                          }
-                          /*else if ( !context
-                              .watch<AuthenticationService>()
-                              .userExists) {
-                            return 'This email is not registered, please ceate an account';
-                          }*/
-                          return null;
-                        }*/
                         })),
                 Padding(
                     padding:

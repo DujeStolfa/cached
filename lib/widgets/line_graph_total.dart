@@ -1,30 +1,12 @@
 import 'dart:convert';
 import 'package:aplikacija/models/prediction_api_response.dart';
 import 'package:aplikacija/models/reduced_transaction_model.dart';
-import 'package:aplikacija/services/auth_service.dart';
-import 'package:aplikacija/services/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
-/* TODO: 
-  x | sredit ovo racunanje ukupnog iznosa  
-  grafovi - za svaki wallet isto sta i ovde kme
-          - jos jedna vrsta grafova
-  kartice
-  transfer momenat
-
-  .. sitnice ..
-  200 tommy i hrk
-  transfer ikone
-
-
-
- */
 
 class LineGraphTotal extends StatefulWidget {
   @override
@@ -50,16 +32,12 @@ class _LineGraphTotalState extends State<LineGraphTotal> {
   Widget build(BuildContext context) {
     _walletsSnapshot = context.watch<QuerySnapshot>();
     _transactionData = fetchTransactionData();
-    //_transactionData = fetchTransactionData(context);
-    print('Ginem Ginem GInem Ginem Ginem Ginem Ginem Ginem Ginem Ginem');
-    print(_transactionData);
-    print('Ginem Ginem GInem Ginem Ginem Ginem Ginem Ginem Ginem Ginem');
+
     return Stack(
       children: <Widget>[
         AspectRatio(
           aspectRatio: 1.70,
           child: Container(
-            //decoration: const BoxDecoration(color: Color(0xff232d37)),
             child: Padding(
               padding: const EdgeInsets.only(
                   right: 18.0, left: 12.0, top: 12, bottom: 12),
@@ -86,7 +64,6 @@ class _LineGraphTotalState extends State<LineGraphTotal> {
 
   Future<PredictionApiResponse> fetchPrediction(
       List totalValues, List relativeValues) async {
-    print(relativeValues);
     http.Response response = await http.post(
       Uri.http('dujestolfa.pythonanywhere.com', 'api'),
       headers: {
@@ -95,13 +72,10 @@ class _LineGraphTotalState extends State<LineGraphTotal> {
       body: jsonEncode(
           <String, List>{"Total": totalValues, "Change": relativeValues}),
     );
-    print('jel ovo radi');
-    print(response.statusCode);
-    print(jsonDecode(response.body));
+
     if (response.statusCode == 201) {
       dynamic decodedBody = jsonDecode(response.body);
-      print(decodedBody);
-      print('evo me');
+
       return PredictionApiResponse(decodedBody['prediction'],
           decodedBody['confidence'], decodedBody['prediction_shift']);
     } else {
@@ -142,17 +116,7 @@ class _LineGraphTotalState extends State<LineGraphTotal> {
       balanceHistory[i] = currentBalance - allTransactions[i].value;
       currentBalance -= allTransactions[i].value;
     }
-    //print(balanceHistory.sublist(0, balanceHistory.length - 1));
-    //print(allTransactions.map((a) => a.value));
-    /*PredictionApiResponse resp = await fetchPrediction(
-        balanceHistory.sublist(0, balanceHistory.length - 1),
-        allTransactions.map((a) => a.value).toList());
-        .sublist(0, balanceHistory.length - 1)
-        */
-    print('balanssssss');
-    print(balanceHistory.sublist(0, balanceHistory.length));
-    print(allTransactions.map((a) => a.value).toList());
-    print('jel bar ovo radi');
+
     return [
       balanceHistory.sublist(1, balanceHistory.length),
       allTransactions.map((a) => a.value).toList()
@@ -180,35 +144,10 @@ class _LineGraphTotalState extends State<LineGraphTotal> {
   }
 
   LineChartData mainData(PredictionApiResponse prediction) {
-// prodi svaki novcanik - 10 po 10
-// poslagaj transakcije od novog u ukupne
-
-/*
-{
-        "Total": np.array([244, 344, 594, 694, 664, 634, 619, 689, 389, 589]),
-        "Change": np.array([100, 250, 100, -30, -30, -15, 56, -300, 80, 200]),
-    }
-     */
-    //List<double> recentTransactions = balanceHistory(context);
-    /*[
-      244,
-      344,
-      594,
-      694,
-      664,
-      634,
-      619,
-      689,
-      389,
-      589
-    ];*/
-
-    //getAllTransactions(context).map((e) => e.value.toDouble()).toList();
     List<double> recentTransactions = _transactionData[0];
     for (var element in prediction.prediction) {
       recentTransactions.add(element.round() * 1.0);
     }
-    //https://dev.to/kamilpowalowski/stock-charts-with-flchart-library-1gd2
 
     List<FlSpot> spotList = [];
     int k = min(recentTransactions.length, 100);
@@ -216,19 +155,6 @@ class _LineGraphTotalState extends State<LineGraphTotal> {
       spotList.add(FlSpot(
           i.toDouble(), recentTransactions[recentTransactions.length - k + i]));
     }
-
-    /*spotList = [
-      FlSpot(0, 244),
-      FlSpot(1, 344),
-      FlSpot(2, 594),
-      FlSpot(3, 694),
-      FlSpot(4, 664),
-      FlSpot(5, 634),
-      FlSpot(6, 619),
-      FlSpot(7, 689),
-      FlSpot(8, 389),
-      FlSpot(9, 289),
-    ];*/
 
     return LineChartData(
       extraLinesData: ExtraLinesData(verticalLines: [

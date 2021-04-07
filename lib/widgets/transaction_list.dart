@@ -71,23 +71,12 @@ class _TransactionListState extends State<TransactionList> {
                     key: Key(transaction.id),
                     onDismissed: (direction) {
                       setState(() {
-                        /*int selectedIndex =
-                      widget.selectedWallet.indexFromId(transaction.id);
-                  if (selectedIndex >= 0) {
-                    widget.selectedWallet.transactions.removeAt(selectedIndex);
-                    
-                    
-                  }*/
-
                         widget.selectedWallet.removeTransaction(transaction.id);
                         service.removeTransaction(
                           widget.selectedWallet.transactions,
                           currentUser,
                           widget.selectedWallet,
                         );
-                        print('');
-                        //print(selectedIndex);
-                        print('ouououououo rain washeees you cleeann');
                       });
                     },
                     child: InkWell(

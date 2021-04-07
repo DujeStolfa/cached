@@ -1,3 +1,10 @@
+/// Forma za unos novog transfera
+///
+/// Korisniku je prikazana forma sa svim potrebnim poljima
+/// za stvaranje novog transfera. Upisani se podatci šalju
+/// servisu koji te podatke dalje prosljeđuje u bazu podataka
+/// na Cloud Firestoreu.
+
 import 'package:aplikacija/models/main_model.dart';
 import 'package:aplikacija/models/wallet_model.dart';
 import 'package:aplikacija/screens/add_category_dialog.dart';
@@ -36,10 +43,6 @@ class _NewTransferScreenState extends State<NewTransferScreen> {
     User currentUser = context.watch<AuthenticationService>().currentUser;
     Map<String, dynamic> userSnapshotData =
         context.watch<DocumentSnapshot>().data();
-
-    _wallets = walletsSnapshot.docs
-        .map((element) => model.createWallet(element.data()))
-        .toList();
 
     List<dynamic> categories = userSnapshotData['categories'];
 
@@ -160,7 +163,6 @@ class _NewTransferScreenState extends State<NewTransferScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Container(
-                                // botun za otvorit datetime izbornik
                                 width: 120,
                                 child: OutlineButton.icon(
                                   onPressed: () {
@@ -283,12 +285,6 @@ class _NewTransferScreenState extends State<NewTransferScreen> {
   }
 
   Widget _buildReceiverWalletDropdown() {
-    /*if (wallets.length > 1) {
-      _selectedReceiverWallet = wallets[1];
-    } else {
-      _selectedReceiverWallet = wallets[0];
-    }*/
-
     return Row(
       children: [
         Icon(
@@ -319,8 +315,6 @@ class _NewTransferScreenState extends State<NewTransferScreen> {
   }
 
   Widget _buildChips(List<dynamic> categories) {
-    // stvara listu kategorija
-
     List<Widget> chips = [];
 
     for (int i = 0; i < categories.length; i++) {
@@ -350,15 +344,12 @@ class _NewTransferScreenState extends State<NewTransferScreen> {
     }
 
     return ListView(
-      // This next line does the trick.
       scrollDirection: Axis.horizontal,
       children: chips,
     );
   }
 
   void _selectDate(BuildContext context) async {
-    // otvara datepicker
-
     final DateTime selected = await showDatePicker(
         context: context,
         initialDate: _selectedDate,

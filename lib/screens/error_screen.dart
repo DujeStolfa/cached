@@ -1,3 +1,5 @@
+/// Tekstni okvir koji se prikže korisniku u slučaju pogreške.
+
 import 'package:flutter/material.dart';
 
 class ErrorScreen extends StatelessWidget {
@@ -6,7 +8,7 @@ class ErrorScreen extends StatelessWidget {
     return MaterialApp(
         home: Scaffold(
       body: Center(
-        child: Text('o ne'),
+        child: Text('Error.'),
       ),
     ));
   }

@@ -1,3 +1,7 @@
+/// Klasa AppUser
+///
+/// Predstavlja podatke korisnika aplikacije.
+
 import 'package:aplikacija/models/wallet_model.dart';
 
 class AppUser {

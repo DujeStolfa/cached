@@ -38,7 +38,7 @@ class _GraphListState extends State<GraphList> {
       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
       child: Center(
         child: Text(
-          'Add a few more transactions, and your overall balance will be  displayed here',
+          'Add a few more transactions, and your overall balance will be displayed here',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.w700,

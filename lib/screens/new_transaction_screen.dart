@@ -1,10 +1,15 @@
-import 'package:aplikacija/models/main_model.dart';
-import 'package:aplikacija/models/transaction_model.dart';
-import 'package:aplikacija/models/user_model.dart';
+/// Forma za upis nove transakcije
+///
+/// Korisniku je prikazana forma sa svim potrebnim poljima
+/// za stvaranje nove transakcije. Upisani se podatci šalju
+/// servisu koji te podatke dalje prosljeđuje u bazu podataka
+/// na Cloud Firestoreu.
+
 import 'package:aplikacija/models/wallet_model.dart';
-import 'package:aplikacija/services/auth_service.dart';
 import 'package:aplikacija/services/firestore_service.dart';
+import 'package:aplikacija/services/auth_service.dart';
 import 'package:aplikacija/widgets/disabled_transaction_message.dart';
+import 'package:aplikacija/models/main_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +26,8 @@ class NewTransactionScreen extends StatefulWidget {
 
 class _NewTransactionScreenState extends State<NewTransactionScreen> {
   final _formKey = GlobalKey<FormState>();
-  //final AppUser _currentUser = ;
 
   int _selectedIndex;
-  //List<String> _categories = model.users[1].categories;
   bool _loaded = false;
 
   double _selectedValue;
@@ -42,7 +45,6 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
   }
 
   void _submit(dynamic service, User user, List categories) {
-    // kad se pritisne done botun provjeri jel sve dobro uneseno
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
 
@@ -52,18 +54,8 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
         _selectedCategory = '';
       }
 
-      print(_selectedCategory);
-      print(_selectedDescription);
-      print(_selectedExpense);
-      print(_selectedValue);
-      print(_selectedWallet);
-
-      print(DateTime.now().toString());
       Timestamp timestamp = Timestamp.fromMillisecondsSinceEpoch(
           _selectedDate.millisecondsSinceEpoch);
-
-      //napravi transaction, zasto? aaaaa ?! mozda je sve ok
-      //napravi mapu data i posalji na firebase
 
       Map<String, dynamic> transactionData = {
         'value': _selectedValue,
@@ -75,27 +67,6 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
         'isExpanded': false,
       };
 
-      print('a a a a  a  a a   a a a  a a  a n n nn vn vnvn vn vn vn vn vnv ');
-      print(_selectedWallet.transactions);
-      print('');
-      service.addTransaction(transactionData, _selectedWallet, user);
-      print('');
-      print(_selectedWallet.transactions);
-      print('');
-
-      /*Transaction newTransaction = Transaction(_selectedValue, _selectedExpense,
-          _selectedDescription, _selectedDate, _selectedCategory);
-
-      AppUser modelUser = model.users.where((AppUser user) {
-        return user.id == _currentUser.id;
-      }).toList()[0];
-      print('vvv');
-      //modelUser.wallets[_selectedWallet.id].transactions.add(newTransaction);
-      //modelUser.wallets[_selectedWallet.id].addTransaction(newTransaction);
-
-      model.addTransaction(1, _selectedWallet.id, newTransaction);
-      print('bbbb');
-      print(model.users[1].wallets['zl0'].balance);*/
       Navigator.pop(context);
     }
   }
@@ -152,40 +123,8 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
       ],
     );
   }
-  /*
-  Widget _buildWalletDropdown(List<dynamic> wallets) {
-    return Row(
-      children: [
-        Icon(
-          Icons.account_balance_wallet_outlined,
-          size: 27,
-        ),
-        SizedBox(width: 12),
-        DropdownButton<Wallet>(
-          onChanged: (Wallet selectedWallet) {
-            setState(() {
-              _selectedWallet = selectedWallet;
-            });
-          },
-          value: _selectedWallet,
-          items: wallets.map(
-            (category) {
-              return DropdownMenuItem(
-                value: category,
-                child: Text(
-                  category,
-                ),
-              );
-            },
-          ).toList(),
-        ),
-      ],
-    );
-  } */
 
   Widget _buildChips(List<dynamic> categories) {
-    // stvara listu kategorija
-
     List<Widget> chips = [];
 
     for (int i = 0; i < categories.length; i++) {
@@ -215,7 +154,6 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
     }
 
     return ListView(
-      // This next line does the trick.
       scrollDirection: Axis.horizontal,
       children: chips,
     );
@@ -224,33 +162,17 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
   @override
   Widget build(BuildContext context) {
     _walletsSnapshot = context.watch<QuerySnapshot>();
-    //User currentUser = context.watch<AuthenticationService>().currentUser;
     Map<String, dynamic> userSnapshotData =
         context.watch<DocumentSnapshot>().data();
     User currentUser = context.watch<AuthenticationService>().currentUser;
 
     dynamic service = context.watch<FirestoreService>();
 
-    // odavde nastavnit
-    // ovo vraca wallete sa praznon liston transakcija
-    // pa se svaki put ka resetira u bazi :/
     _wallets = _walletsSnapshot.docs
         .map((element) => model.createWallet(element.data()))
         .toList();
-    for (var wallet in _wallets) {
-      print(' ');
-      print(wallet.name);
-    }
 
-    //if (!_loaded) {
-    //_selectedWallet = _wallets[0];
-//      _loaded = true;
-    //  }
-    if (_selectedWallet != null) {
-      print('___________________' + _selectedWallet.name);
-    }
     List<dynamic> categories = userSnapshotData['categories'];
-    //List<dynamic> wallets = userSnapshotData['walletNames'];
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -359,7 +281,6 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
                                         return _buildWalletDropdown();
                                       }(),
                                 Container(
-                                  // botun za otvorit datetime izbornik
                                   width: 120,
                                   child: OutlineButton.icon(
                                     onPressed: () {

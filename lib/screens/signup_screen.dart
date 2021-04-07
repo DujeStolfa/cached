@@ -1,3 +1,10 @@
+/// Ekran za regstraciju korisnika
+///
+/// Sadrži formu za upis odgovarajućih podataka o korisniku i
+/// funkcije pomoću kojih se osigurava ispravnost upisanih
+/// podataka koji se prosljeđuju servisu za autentifikaciju i
+/// Firebase Authu.
+
 import 'package:aplikacija/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,12 +24,6 @@ class _SignupScreenState extends State<SignupScreen> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
 
-      print(_name);
-      print(_email);
-      print(_password);
-      // loginaj usera
-
-      // HACK: vidi https://www.youtube.com/watch?v=mZYuuGAIwe4
       context
           .read<AuthenticationService>()
           .signUp(email: _email.trim(), password: _password.trim());

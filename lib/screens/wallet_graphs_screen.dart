@@ -1,15 +1,16 @@
-import 'dart:convert';
+/// Ekran s fijagramima pojedinog novčanika
+///
+/// Korisniku je prikazan naslov ekrana, dijagram salda
+/// odabranog novčanika i dijagram transakcija tog novčanika.
+/// Podatci se uzimaju izravno iz Cloud Firestore baze podataka.
 
-import 'package:aplikacija/models/prediction_api_response.dart';
 import 'package:aplikacija/models/wallet_model.dart';
 import 'package:aplikacija/widgets/wallet_balance_graph.dart';
 import 'package:aplikacija/widgets/wallet_graphs_header.dart';
-import 'package:aplikacija/widgets/wallet_header.dart';
 import 'package:aplikacija/widgets/wallet_transaction_graph.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 class WalletGraphsScreen extends StatefulWidget {
   final Wallet selectedWallet;

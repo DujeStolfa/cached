@@ -1,3 +1,10 @@
+/// Dijaloški okvir za uređivanje transakcije
+///
+/// Pri dugom pritisku na transakciju korisniku se prikazuje ovaj
+/// okvir s poljem za promjenu novog opisa transakcije. Korišten
+/// je autorski servis za autentifikaciju i sam Firebase Auth za
+/// rukovanje i dohvaćanje podataka o trenutnom korisniku.
+
 import 'package:aplikacija/models/wallet_model.dart';
 import 'package:aplikacija/services/auth_service.dart';
 import 'package:aplikacija/services/firestore_service.dart';
@@ -29,7 +36,6 @@ class _EditTransactionDialogState extends State<EditTransactionDialog> {
       service.updateTransactionDescription(widget.transactionId, _description,
           currentUser, widget.selectedWallet);
 
-      // cekat ' ono sta se vrti
       Navigator.pop(context, _description);
     }
   }
@@ -41,8 +47,7 @@ class _EditTransactionDialogState extends State<EditTransactionDialog> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white.withOpacity(
-          0.92), // this is the main reason of transparency at next screen. I am ignoring rest implementation but what i have achieved is you can see.
+      backgroundColor: Colors.white.withOpacity(0.92),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 40),
         child: Column(

@@ -24,22 +24,12 @@ class _WalletHeaderState extends State<WalletHeader> {
 
   @override
   Widget build(BuildContext context) {
-    //DocumentSnapshot usersSnapshot = context.watch<DocumentSnapshot>();
-    //QuerySnapshot walletsSnapshot = context.watch<QuerySnapshot>();
-    /*_currentWalletId = widget.selectedWalletID;
-    _balance = _currentWallet.balance;*/
     QuerySnapshot walletsSnapshot = widget.snapshot;
-    /*Wallet currentWallet =
-
-                model.createWallet(walletsSnapshot.docs[index].data());*/
 
     _currentWallet = model.createWallet(walletsSnapshot.docs
         .where((element) => element.id == widget.selectedWallet.id)
         .toList()[0]
         .data());
-
-    print(_currentWallet);
-    print('stakleno neeeeeeboooooo se raaaaa biiii looooo');
 
     return Container(
       width: MediaQuery.of(context).size.width - 65,

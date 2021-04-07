@@ -1,3 +1,8 @@
+/// Dijaloški okvir za dodavanje kategorije transakcije
+///
+/// Dijalog sadrži formu s  poljem za unos imena kategorije koju
+/// korisnik želi dodati u svoj račun.
+
 import 'package:flutter/material.dart';
 
 class AddCategoryDialog extends StatefulWidget {

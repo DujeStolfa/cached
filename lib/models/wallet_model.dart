@@ -1,3 +1,10 @@
+/// Klasa Wallet
+///
+/// Predstavlja podatke o pojedinom novčaniku korisnika u obliku
+/// prilagođenom za korištenje u aplikaciji. Library Equatable pruža
+/// funkcionalnost jednostavnijeg uspoređivanja dviju instanci
+/// ove klase.
+
 import 'package:aplikacija/models/transaction_model.dart';
 import 'package:equatable/equatable.dart';
 
@@ -19,15 +26,16 @@ class Wallet extends Equatable {
   @override
   List<Object> get props => [id];
 
-  /*@override
-  bool operator ==(Object other) => other is Wallet && other.id == id;*/
-
   void addTransaction(Transaction transaction) {
     List<int> selectedDate = transaction.listDate;
 
-    //nadi indeks
     int index = 0;
 
+    /* 
+    * Izračunaj indeks u listi transakcija na kojem bi se 
+    * trebala nalaziti prosljeđena transakcija da bi ta lista 
+    * i dalje bila sortirana.
+    */
     for (var i = 0; i < this.transactions.length; i++) {
       List<int> dateAtIndex = this.transactions[i].listDate;
 
@@ -46,13 +54,8 @@ class Wallet extends Equatable {
         }
       }
     }
-    /*print('dobar dan dobrodosli u ndziajn ja sam mirjana mikulec');
-    print(index);
-    print(selectedDate);*/
 
     transactions.insert(index, transaction);
-
-    //transactions.add(transaction);
 
     if (transaction.expense) {
       balance -= transaction.value;
@@ -75,21 +78,10 @@ class Wallet extends Equatable {
       this.balance -= selectedTransaction.value;
     }
 
-    /*if (selectedIndex >= 0) {
-                    widget.selectedWallet.transactions.removeAt(selectedIndex);
-                    
-                    service.removeTransaction(
-                      widget.selectedWallet.transactions,
-                      currentUser,
-                      widget.selectedWallet,
-                    );
-                  }*/
-
     return selectedTransaction;
   }
 
   int indexFromId(String id) {
-    ///pominit ime u transactionindexfromid..........
     for (var i = 0; i < this.transactions.length; i++) {
       if (transactions[i].id == id) {
         return i;
@@ -99,7 +91,6 @@ class Wallet extends Equatable {
   }
 
   Map<String, dynamic> toFirestoreMap() {
-    //cpnvert wallet ...
     return {
       'id': this.id,
       'name': this.name,

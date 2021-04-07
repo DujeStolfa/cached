@@ -162,14 +162,6 @@ class _WalletTransactionGraphState extends State<WalletTransactionGraph> {
   LineChartData mainData(PredictionApiResponse prediction) {
     List<double> recentTransactions;
     double predicted;
-    /*if (widget.graphType == 'balance') {
-    } else {
-      recentTransactions = _transactionData[1];
-      double predicted = _transactionData[0][_transactionData[0].length - 1] -
-          _transactionData[0][_transactionData[0].length - 2];
-
-      recentTransactions.add(predicted);
-    }*/
 
     recentTransactions = _transactionData[1];
     predicted = prediction.prediction[0] -
@@ -180,8 +172,6 @@ class _WalletTransactionGraphState extends State<WalletTransactionGraph> {
           _transactionData[i][_transactionData[i].length - 1];
       recentTransactions.add(predicted);
     }
-
-    print(recentTransactions.reduce(min));
 
     List<FlSpot> spotList = [];
     int k = min(recentTransactions.length, 100);
