@@ -27,7 +27,7 @@ class Wallet extends Equatable {
   List<Object> get props => [id];
 
   void addTransaction(Transaction transaction) {
-    List<int> selectedDate = transaction.listDate;
+    int selectedDate = transaction.intDate;
 
     int index = 0;
 
@@ -37,22 +37,35 @@ class Wallet extends Equatable {
     * i dalje bila sortirana.
     */
     for (var i = 0; i < this.transactions.length; i++) {
-      List<int> dateAtIndex = this.transactions[i].listDate;
+      int dateAtIndex = this.transactions[i].intDate;
 
-      if (dateAtIndex[0] > selectedDate[0]) {
-        index = i + 1;
+      if (dateAtIndex <= selectedDate) {
+        index = i;
+        break;
       } else {
-        if (dateAtIndex[1] > selectedDate[1]) {
-          index = i + 1;
+        index = i + 1;
+      }
+
+      /*print(dateAtIndex);
+
+      print(selectedDate);
+      print(index);
+      print('');
+
+      if (dateAtIndex[0] < selectedDate[0]) {
+        index = i;
+      } else {
+        if (dateAtIndex[1] < selectedDate[1]) {
+          index = i;
         } else {
-          if (dateAtIndex[2] > selectedDate[2]) {
-            index = i + 1;
+          if (dateAtIndex[2] < selectedDate[2]) {
+            index = i;
           } else {
             index = i;
             break;
           }
         }
-      }
+      }*/
     }
 
     transactions.insert(index, transaction);

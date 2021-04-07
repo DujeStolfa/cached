@@ -39,7 +39,7 @@ class FirestoreService {
         .collection('users')
         .doc(user.uid)
         .update({'walletNames': walletNames});
-    print(wallet.toFirestoreMap());
+
     return _firestore
         .collection('users')
         .doc(user.uid)

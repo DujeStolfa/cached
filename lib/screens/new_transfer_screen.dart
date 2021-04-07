@@ -44,6 +44,10 @@ class _NewTransferScreenState extends State<NewTransferScreen> {
     Map<String, dynamic> userSnapshotData =
         context.watch<DocumentSnapshot>().data();
 
+    _wallets = walletsSnapshot.docs
+        .map((element) => model.createWallet(element.data()))
+        .toList();
+
     List<dynamic> categories = userSnapshotData['categories'];
 
     return Scaffold(
@@ -85,7 +89,7 @@ class _NewTransferScreenState extends State<NewTransferScreen> {
                               children: [
                                 Row(children: [
                                   Text(
-                                    'From:',
+                                    'From:  ',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         color: Colors.blueGrey,
@@ -104,7 +108,7 @@ class _NewTransferScreenState extends State<NewTransferScreen> {
                                 Row(
                                   children: [
                                     Text(
-                                      'To:',
+                                      'To:  ',
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           color: Colors.blueGrey,

@@ -32,6 +32,21 @@ class Transaction {
   List<int> get listDate =>
       [this.dateTimeDate.year, this.dateTimeDate.month, this.dateTimeDate.day];
 
+  int get intDate {
+    int yearInt = this.dateTimeDate.year;
+    int monthInt = this.dateTimeDate.month;
+    int dayInt = this.dateTimeDate.day;
+
+    String year = "0000" + yearInt.toString();
+    year = year.substring(year.length - 4);
+    String month = "00" + monthInt.toString();
+    month = month.substring(month.length - 2);
+    String day = "00" + dayInt.toString();
+    day = day.substring(day.length - 2);
+
+    return int.parse(year + month + day);
+  }
+
   String stringDate() {
     DateTime displayDate = this.dateTimeDate;
 

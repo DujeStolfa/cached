@@ -67,6 +67,8 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
         'isExpanded': false,
       };
 
+      service.addTransaction(transactionData, _selectedWallet, user);
+
       Navigator.pop(context);
     }
   }
