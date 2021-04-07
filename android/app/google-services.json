@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "559954684083",
+    "project_id": "aplikacija-razvoj",
+    "storage_bucket": "aplikacija-razvoj.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:559954684083:android:70f799ff31c3975e1128c6",
+        "android_client_info": {
+          "package_name": "com.example.aplikacija"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "559954684083-ivgn4nqveqdrp9per3ohr8vdbiqtupre.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB19qtH0zlwasdpDnPONQ--6R0voe-I_Lg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "559954684083-ivgn4nqveqdrp9per3ohr8vdbiqtupre.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,518 @@
+==== boje ====
+#da6f29
+#561044
+#217194
+#214368
+#091a24
+=======
+
+==== home sa jednin tabon ====
+
+import 'package:flutter/material.dart';
+
+class SignupScreen extends StatefulWidget {
+  static final String id = 'signup_screen';
+
+  @override
+  _SignupScreenState createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
+  final _formKey = GlobalKey<FormState>();
+  String _email, _password;
+
+  _submit() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+
+      print(_email);
+      print(_password);
+      // loginaj usera
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Welcome',
+              style: TextStyle(
+                fontSize: 45.0,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+            Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 30.0,
+                      vertical: 10.0,
+                    ),
+                    child: TextFormField(
+                      decoration: InputDecoration(labelText: 'Email'),
+                      onSaved: (input) => _email = input,
+                      validator: (input) => !input.contains('@')
+                          ? 'Please enter a valid email'
+                          : null,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 30.0,
+                      vertical: 10.0,
+                    ),
+                    child: TextFormField(
+                      decoration: InputDecoration(labelText: 'Password'),
+                      onSaved: (input) => _password = input,
+                      obscureText: true,
+                      validator: (input) => input.length < 6
+                          ? 'Password must be at least 6 characters long'
+                          : null,
+                    ),
+                  ),
+                  SizedBox(height: 15.0),
+                  Container(
+                    width: 200,
+                    child: RaisedButton(
+                      onPressed: _submit,
+                      child: Text(
+                        'Log in',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  Container(
+                    width: 200,
+                    height: 35.0,
+                    child: FlatButton(
+                      onPressed: _submit,
+                      child: Text('Create an account'),
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+===================
+
+
+========= new transaction screenđ =======
+
+import 'package:aplikacija/models/main_model.dart';
+import 'package:aplikacija/models/user_model.dart';
+import 'package:aplikacija/models/wallet_model.dart';
+import 'package:flutter/material.dart';
+
+class NewTransactionScreen extends StatefulWidget {
+  static final String id = 'new_transaction';
+  @override
+  _NewTransactionScreenState createState() => _NewTransactionScreenState();
+}
+
+class _NewTransactionScreenState extends State<NewTransactionScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final User _currentUser = model.users[1];
+
+  String _value, _description;
+  int _radioValue1 = 0;
+  DateTime selectedDate = DateTime.now();
+  Wallet dropdownValue = model.users[1].wallets[0]; // TODO: wallet.favorite
+
+  int _selectedIndex;
+  List<String> _options = model.users[1].categories;
+
+  _submit() {
+    // kad se pritisne done botun provjeri jel sve dobro uneseno
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+
+      print(_value);
+      print(_description);
+      // dodaj transakciju
+      Navigator.pop(context);
+    }
+  }
+
+  _selectDate(BuildContext context) async {
+    // otvara datepicker
+
+    final DateTime selected = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2000),
+        lastDate: DateTime.now());
+
+    if (selected != null) {
+      setState(() {
+        selectedDate = selected;
+        print(selectedDate);
+      });
+    }
+  }
+
+  void _handleRadioValueChange1(int value) {
+    setState(() {
+      _radioValue1 = value;
+
+      switch (_radioValue1) {
+        case 0:
+          print('a');
+          break;
+        case 1:
+          print('b');
+          break;
+      }
+    });
+  }
+
+  Widget _buildChips() {
+    // stvara listu kategorija
+
+    List<Widget> chips = new List();
+
+    for (int i = 0; i < _options.length; i++) {
+      ChoiceChip choiceChip = ChoiceChip(
+        selected: _selectedIndex == i,
+        label: Text(_options[i], style: TextStyle(color: Colors.white)),
+        elevation: 3,
+        pressElevation: 2,
+        backgroundColor: Colors.indigo[300],
+        selectedColor: Theme.of(context).accentColor,
+        onSelected: (bool selected) {
+          setState(() {
+            if (selected) {
+              _selectedIndex = i;
+            }
+          });
+        },
+      );
+
+      if (i != 0) {
+        chips.add(Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10), child: choiceChip));
+      } else {
+        chips.add(Padding(
+            padding: EdgeInsets.fromLTRB(25, 0, 10, 0), child: choiceChip));
+      }
+    }
+
+    return ListView(
+      // This next line does the trick.
+      scrollDirection: Axis.horizontal,
+      children: chips,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
+      appBar: AppBar(centerTitle: true, elevation: 0.0),
+      body: Column(
+        children: [
+          Padding( //pozadina i naslov
+              padding: EdgeInsets.fromLTRB(40.0, 60.0, 40.0, 20.0),
+              child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text('New transaction',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40.0,
+                          fontWeight: FontWeight.w700)))),
+          Expanded(
+              child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.only(topLeft: Radius.circular(35.0)),
+                      color: Colors.white),
+                  child: ListView(
+                    //da se moze skrolat
+                    children: [
+                      Column(children: [
+                        Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Radio(
+                                      value: 0,
+                                      groupValue: _radioValue1,
+                                      onChanged: _handleRadioValueChange1),
+                                  Text('Expense',
+                                      style: new TextStyle(fontSize: 16.0)),
+                                  SizedBox(width: 40),
+                                  Radio(
+                                      value: 1,
+                                      groupValue: _radioValue1,
+                                      onChanged: _handleRadioValueChange1),
+                                  Text('Income',
+                                      style: new TextStyle(fontSize: 16.0)),
+                                  SizedBox(width: 25),
+                                ])),
+                        Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 30.0, vertical: 10.0),
+                                    child: TextFormField(
+                                        decoration:
+                                            InputDecoration(labelText: 'Value'),
+                                        keyboardType: TextInputType.number,
+                                        onSaved: (input) => _value = input,
+                                        validator: (input) =>
+                                            input.trim().isEmpty
+                                                ? 'Please enter a value'
+                                                : null)),
+                                Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 30.0, vertical: 10.0),
+                                    child: TextFormField(
+                                        decoration: InputDecoration(
+                                            labelText: 'Description'),
+                                        onSaved: (input) =>
+                                            _description = input)),
+                              ],
+                            )),
+                        SizedBox(height: 15.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.account_balance_wallet_outlined,
+                                    size: 27),
+                                SizedBox(width: 12),
+                                DropdownButton<Wallet>(
+                                  onChanged: (Wallet selectedWallet) {
+                                    setState(() {
+                                      dropdownValue = selectedWallet;
+                                    });
+                                  },
+                                  value: dropdownValue,
+                                  items:
+                                      _currentUser.wallets.map((Wallet wallet) {
+                                    return DropdownMenuItem(
+                                      value: wallet,
+                                      child: Text(
+                                        wallet.name,
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              width: 120,
+                              child: OutlineButton.icon(
+                                  onPressed: () {
+                                    _selectDate(context);
+                                  },
+                                  label: Text('Date',
+                                      style: TextStyle(fontSize: 16)),
+                                  icon: Icon(Icons.date_range_outlined)),
+                            )
+                          ],
+                        ),
+                        Padding(
+                            // TODO: ovo stavit u tipa subtitle widget
+                            padding: EdgeInsets.fromLTRB(30, 25, 30, 14),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Categories',
+                                      style: TextStyle(
+                                          color: Colors.blueGrey,
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 1.0)),
+                                  Container(
+                                    height: 30,
+                                    child: IconButton(
+                                        icon: Icon(Icons.add),
+                                        color: Colors.blueGrey,
+                                        onPressed: () =>
+                                            print('dodaj kategoriju')),
+                                  )
+                                ])),
+                        Container(
+                          height: 40,
+                          child: _buildChips(),
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                              padding: EdgeInsets.only(top: 25, right: 40),
+                              child: Container(
+                                width: 150,
+                                child: RaisedButton(
+                                    onPressed: _submit,
+                                    child: Text('Done',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                            letterSpacing: 0.5)),
+                                    color: Theme.of(context).accentColor),
+                              )),
+                        ),
+                      ]),
+                    ],
+                  )))
+        ],
+      ),
+    );
+  }
+}
+ ======== end new transaction screen
+
+
+ ====== auth wrapper =====
+ import 'package:aplikacija/screens/error_screen.dart';
+import 'package:aplikacija/screens/home_screen.dart';
+import 'package:aplikacija/screens/loading_screen.dart';
+import 'package:aplikacija/screens/login_screen.dart';
+import 'package:aplikacija/services/auth.dart';
+import 'package:flutter/material.dart';
+
+class AuthenticationWrapper extends StatelessWidget {
+  final AuthService _auth = AuthService();
+  @override
+  Widget build(BuildContext context) {
+    dynamic result = _auth.nmg();
+
+    result.then((value) {
+      if (value == null) {
+        return LoginScreen();
+      } else {
+        print(result);
+        return ErrorScreen();
+      }
+    });
+
+    return LoginScreen();
+  }
+}
+============
+
+
+==== auth.dart ======
+
+import 'package:firebase_auth/firebase_auth.dart';
+
+class AuthService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future nmg() async {
+    _auth.authStateChanges().listen((User user) {
+      return user;
+    });
+  }
+
+  Future signInAnon() async {
+    try {
+      UserCredential result = await _auth.signInAnonymously();
+      print(result.user.isAnonymous);
+      return result.user;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+}
+
+======= 
+
+
+======= fucking algoritmi ========
+
+  void mergeTransactionLists(List transactionsA, List transactionsB,
+      int lengthA, int lengthB, List<int> mergedTransactions) {
+    int i = 0, j = 0, k = 0;
+
+    while (i < lengthA && j < lengthB) {
+      if (transactionsA[i] < transactionsB[j]) {
+        mergedTransactions[i] = transactionsA[i];
+
+        k++;
+        i++;
+      } else {
+        mergedTransactions[i] = transactionsB[j];
+
+        k++;
+        j++;
+      }
+    }
+
+    while (i < lengthA) {
+      mergedTransactions[k] = transactionsA[i];
+      k++;
+      i++;
+    }
+
+    while (j < lengthB) {
+      mergedTransactions[k] = transactionsB[j];
+      k++;
+      j++;
+    }
+  }
+
+  int n = 4;
+  List<int> mergeNTransactions(
+      List<List> transactions, int i, int j, List<int> mergedTransactions) {
+    //samo jedan momenat
+    if (i == j) {
+      for (var q = 0; q < n; q++) {
+        mergedTransactions[q] = transactions[i][q];
+        return mergedTransactions;
+      }
+    }
+
+    //samo dva momenta
+    if (j - i == 1) {
+      mergeTransactionLists(
+          transactions[i], transactions[j], n, n, mergedTransactions);
+      return mergedTransactions;
+    }
+
+    List<int> merged1 =
+        List<int>.generate((n * (((i + j) / 2) - i + 1)).ceil(), (index) => 0);
+    List<int> merged2 =
+        List<int>.generate((n * (j - ((i + j) / 2))).ceil(), (index) => 0);
+    mergeNTransactions(transactions, i, ((i + j) * 0.5).ceil(), merged1);
+    mergeNTransactions(transactions, ((i + j) * 0.5 + 1).ceil(), j, merged2);
+
+    mergeTransactionLists(
+      merged1,
+      merged2,
+      n * (((i + j) / 2) - i + 1).ceil(),
+      n * (j - ((i + j) / 2)).ceil(),
+      mergedTransactions,
+    );
+  }
+
+  ======= end falgloritm ========
+
+  
