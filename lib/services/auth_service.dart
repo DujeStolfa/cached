@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth;
@@ -18,25 +19,27 @@ class AuthenticationService {
       return await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
     } catch (e) {
-      return e;
+      throw PlatformException(code: "", message: e.message);
     }
+    /*return 'Signed in';
+
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return 'Signed in';
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      throw Exception(e.message);
+    }*/
   }
 
   Future<String> signUp({String email, String password}) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-      return 'signed up';
+      return 'Signed up';
     } on FirebaseAuthException catch (e) {
-      return e.message;
-    }
-  }
-
-  Future<String> signInAnon() async {
-    try {
-      await _firebaseAuth.signInAnonymously();
-      return 'signed in anon';
-    } on FirebaseAuthException catch (e) {
+      print(e.message);
       return e.message;
     }
   }

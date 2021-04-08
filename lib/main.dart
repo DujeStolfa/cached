@@ -66,14 +66,15 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
           create: (_) => FirestoreService(FirebaseFirestore.instance),
         ),
         StreamProvider(
-          create: (context) =>
-              context.read<FirestoreService>().collectionStream(
-                    context.read<AuthenticationService>().currentUser.uid,
-                  ),
+          create: (context) => context.read<FirestoreService>().collectionStream(
+              context /*
+                    context.read<AuthenticationService>().currentUser.uid,*/
+              ),
         ),
         StreamProvider(
           create: (context) => context.read<FirestoreService>().documentStream(
-                context.read<AuthenticationService>().currentUser.uid,
+              context /*
+                context.read<AuthenticationService>().currentUser.uid,*/
               ),
         ),
         ChangeNotifierProvider<MainModel>(

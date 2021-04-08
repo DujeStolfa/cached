@@ -1,28 +1,39 @@
 import 'package:aplikacija/models/main_model.dart';
 import 'package:aplikacija/models/wallet_model.dart';
+import 'package:aplikacija/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:aplikacija/models/transaction_model.dart' as transactionModel;
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 class FirestoreService {
   final FirebaseFirestore _firestore;
 
   FirestoreService(this._firestore);
 
-  Stream<DocumentSnapshot> collectionStream(String uid) {
-    return _firestore.doc('users/$uid').snapshots();
+  Stream<DocumentSnapshot> collectionStream(
+      BuildContext context /*String uid*/) {
+    String uid = context.read<AuthenticationService>().currentUser.uid;
+    return _firestore.collection('users').doc(uid).snapshots();
   }
 
-  Stream<QuerySnapshot> documentStream(String uid) {
-    return _firestore.collection('users/$uid/wallets').snapshots();
+  Stream<QuerySnapshot> documentStream(BuildContext context /*String uid*/) {
+    String uid = context.read<AuthenticationService>().currentUser.uid;
+    return _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('wallets')
+        .snapshots();
   }
 
-  Future<void> createUser(User user, String name) {
+  Future<void> createUser(User user) {
     Map<String, dynamic> data = {
       'categories': [],
-      'name': name,
+      'name': user.displayName,
       'mail': user.email,
       'walletCount': 0,
+      'walletNames': [],
     };
 
     return _firestore.collection('users').doc(user.uid).set(data).then((value) {

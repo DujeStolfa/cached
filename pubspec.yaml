@@ -32,6 +32,7 @@ dependencies:
   fl_chart: ^0.12.2
   http: ^0.12.2
   equatable: ^1.2.6
+  auto_size_text: ^2.1.0
 
 
   # The following adds the Cupertino Icons font to your application.

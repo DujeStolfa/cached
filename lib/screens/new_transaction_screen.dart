@@ -96,7 +96,6 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
   }
 
   Widget _buildWalletDropdown() {
-    print(_selectedWallet.name);
     return Row(
       children: [
         Icon(
