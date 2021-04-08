@@ -76,8 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: EdgeInsets.fromLTRB(40.0, 60.0, 40.0, 20.0),
                 child: Align(
                     alignment: Alignment.bottomLeft,
-                    child: Text(
-                        context.watch<AuthenticationService>().currentUser.uid,
+                    child: Text('Dashboard',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 40.0,

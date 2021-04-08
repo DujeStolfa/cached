@@ -1,7 +1,9 @@
 import 'package:aplikacija/models/main_model.dart';
 import 'package:aplikacija/models/wallet_model.dart';
 import 'package:aplikacija/screens/new_wallet_dialog.dart';
+import 'package:aplikacija/screens/remove_wallet_dialog.dart';
 import 'package:aplikacija/screens/wallet_screen.dart';
+import 'package:aplikacija/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,11 +44,32 @@ class _WalletSelectorState extends State<WalletSelector> {
                 child: InkWell(
                   splashColor: Colors.blue.withAlpha(30),
                   onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            WalletScreen(selectedWallet: currentWallet),
-                      )),
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          WalletScreen(selectedWallet: currentWallet),
+                    ),
+                  ),
+                  onLongPress: () {
+                    setState(
+                      () {
+                        List<dynamic> wallets = context
+                            .read<DocumentSnapshot>()
+                            .data()['walletNames'];
+                        print(wallets);
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            opaque: false,
+                            pageBuilder: (BuildContext context, _, __) =>
+                                RemoveWalletDialog(
+                              selectedWallet: currentWallet,
+                              walletNames: wallets,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
                   child: Container(
                     width: 260,
                     child: Column(

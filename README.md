@@ -17,7 +17,7 @@ samples, guidance on mobile development, and a full API reference.
 
 ## TODO
 - autentifikacija
-- brisanje kategorija
-- brisanje novcanika
++ brisanje kategorija 
++ brisanje novcanika
 - *brzo biranje
 - *

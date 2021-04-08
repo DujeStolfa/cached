@@ -12,13 +12,12 @@ class FirestoreService {
 
   FirestoreService(this._firestore);
 
-  Stream<DocumentSnapshot> collectionStream(
-      BuildContext context /*String uid*/) {
+  Stream<DocumentSnapshot> collectionStream(BuildContext context) {
     String uid = context.read<AuthenticationService>().currentUser.uid;
     return _firestore.collection('users').doc(uid).snapshots();
   }
 
-  Stream<QuerySnapshot> documentStream(BuildContext context /*String uid*/) {
+  Stream<QuerySnapshot> documentStream(BuildContext context) {
     String uid = context.read<AuthenticationService>().currentUser.uid;
     return _firestore
         .collection('users')
@@ -59,6 +58,24 @@ class FirestoreService {
         .set(walletData)
         .then((value) => print("Wallet Updated"))
         .catchError((error) => print("Failed to update wallet: $error"));
+  }
+
+  void removeWallet(User user, Wallet wallet, List<dynamic> walletNames) {
+    walletNames.remove(wallet.name);
+
+    _firestore
+        .collection('users')
+        .doc(user.uid)
+        .update({'walletNames': walletNames});
+
+    _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('wallets')
+        .doc(wallet.id)
+        .delete()
+        .then((value) => print('Deleted Wallet'))
+        .catchError((error) => print("Failed to remove wallet"));
   }
 
   Future<void> addTransaction(
@@ -106,6 +123,17 @@ class FirestoreService {
         .update({'categories': categories})
         .then((value) => print('Added a category'))
         .catchError((error) => print('Failed to add a category: $error'));
+  }
+
+  void removeCategory(User user, List<dynamic> categories, int index) {
+    categories.removeAt(index);
+
+    _firestore
+        .collection('users')
+        .doc(user.uid)
+        .update({'categories': categories})
+        .then((value) => print('Removed a category'))
+        .catchError((error) => print('Failed to remove a category: $error'));
   }
 
   void updateTransactionDescription(

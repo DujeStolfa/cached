@@ -7,7 +7,6 @@
 
 import 'package:aplikacija/services/auth_service.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
         context
             .read<AuthenticationService>()
             .signIn(email: _email.trim(), password: _password.trim());
-        print('help');
       } catch (e) {
         setState(() {
           _error = e.message;
@@ -115,12 +113,15 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             IconButton(
-                onPressed: () {
-                  setState(() {
-                    _error = null;
-                  });
-                },
-                icon: Icon(Icons.close)),
+              onPressed: () {
+                setState(() {
+                  _error = null;
+                });
+              },
+              icon: Icon(
+                Icons.close,
+              ),
+            ),
           ],
         ),
       );

@@ -6,6 +6,7 @@
 /// na Cloud Firestoreu.
 
 import 'package:aplikacija/models/wallet_model.dart';
+import 'package:aplikacija/screens/remove_category_dialog.dart';
 import 'package:aplikacija/services/firestore_service.dart';
 import 'package:aplikacija/services/auth_service.dart';
 import 'package:aplikacija/widgets/disabled_transaction_message.dart';
@@ -146,8 +147,30 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
       );
 
       if (i != 0) {
-        chips.add(Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10), child: choiceChip));
+        chips.add(
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: GestureDetector(
+              onLongPress: () {
+                setState(
+                  () {
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (BuildContext context, _, __) =>
+                            RemoveCategoryDialog(
+                          categories: categories,
+                          selectedIndex: i,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+              child: choiceChip,
+            ),
+          ),
+        );
       } else {
         chips.add(Padding(
             padding: EdgeInsets.fromLTRB(25, 0, 10, 0), child: choiceChip));
