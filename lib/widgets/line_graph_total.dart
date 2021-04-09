@@ -1,3 +1,10 @@
+/// Dijagram svih korisnikovih transakcija
+///
+/// Sakuplja sve podatke potrebne za predviđanje novih transakcija,
+/// ostvaruje komunikaciju s API-jem i prikazuje ih grafički. Pri
+/// učitavanju dijagrama ili u slučaju pogreške, korisniku je
+/// prikazana odgovarajuća poruka.
+
 import 'dart:convert';
 import 'package:aplikacija/models/prediction_api_response.dart';
 import 'package:aplikacija/models/reduced_transaction_model.dart';
@@ -28,40 +35,7 @@ class _LineGraphTotalState extends State<LineGraphTotal> {
 
   bool showAvg = false;
 
-  @override
-  Widget build(BuildContext context) {
-    _walletsSnapshot = context.watch<QuerySnapshot>();
-    _transactionData = fetchTransactionData();
-
-    return Stack(
-      children: <Widget>[
-        AspectRatio(
-          aspectRatio: 1.70,
-          child: Container(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  right: 18.0, left: 12.0, top: 12, bottom: 12),
-              child: FutureBuilder<PredictionApiResponse>(
-                  future:
-                      fetchPrediction(_transactionData[0], _transactionData[1]),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasData) {
-                        return LineChart(mainData(snapshot.data));
-                      }
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    return Center(
-                      child: Icon(Icons.error),
-                    );
-                  }),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
+  // Dohvati predviđanje s autorskog API-ja
   Future<PredictionApiResponse> fetchPrediction(
       List totalValues, List relativeValues) async {
     http.Response response = await http.post(
@@ -83,6 +57,7 @@ class _LineGraphTotalState extends State<LineGraphTotal> {
     }
   }
 
+  // Dohvati podatke o korisnikovim transakcijama
   List fetchTransactionData() {
     List<ReducedTransaction> allTransactions = [];
 
@@ -105,8 +80,10 @@ class _LineGraphTotalState extends State<LineGraphTotal> {
       }
     }
 
+    // Osiguraj da su transkacije poredane kronološki
     allTransactions.sort((a, b) => a.date.compareTo(b.date));
 
+    // Izračunaj ukupno stanje nakon svake transakacije
     List<double> balanceHistory =
         List<double>.generate(allTransactions.length + 1, (index) => 0);
 
@@ -123,37 +100,45 @@ class _LineGraphTotalState extends State<LineGraphTotal> {
     ];
   }
 
+  // Stvori oznake za ordinatnu os dijagrama
   SideTitles leftTitles(List<double> recentTransactions) {
     return SideTitles(
-        showTitles: true,
-        getTextStyles: (value) => const TextStyle(
-              color: Color(0xff67727d),
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-            ),
-        getTitles: (value) {
-          return value.round().toString();
-        },
-        reservedSize: 28,
-        margin: 12,
-        interval: (recentTransactions.reduce(max) +
-                min(recentTransactions.reduce(max) * 1.01, 100) -
-                recentTransactions.reduce(min) +
-                min(recentTransactions.reduce(min) * 0.99, 100)) /
-            5);
+      showTitles: true,
+      getTextStyles: (value) => const TextStyle(
+        color: Color(0xff67727d),
+        fontWeight: FontWeight.bold,
+        fontSize: 12,
+      ),
+      getTitles: (value) {
+        return value.round().toString();
+      },
+      reservedSize: 28,
+      margin: 12,
+      interval: (recentTransactions.reduce(max) +
+              min(recentTransactions.reduce(max) * 1.01, 100) -
+              recentTransactions.reduce(min) +
+              min(recentTransactions.reduce(min) * 0.99, 100)) /
+          5,
+    );
   }
 
+  // Prilagodi sve podatke u format za prikazivanje na dijagramu
   LineChartData mainData(PredictionApiResponse prediction) {
     List<double> recentTransactions = _transactionData[0];
     for (var element in prediction.prediction) {
       recentTransactions.add(element.round() * 1.0);
     }
 
+    // Za svaku transakciju stvori točku (FlSpot) na dijagramu
     List<FlSpot> spotList = [];
     int k = min(recentTransactions.length, 100);
     for (var i = 0; i < k; i++) {
-      spotList.add(FlSpot(
-          i.toDouble(), recentTransactions[recentTransactions.length - k + i]));
+      spotList.add(
+        FlSpot(
+          i.toDouble(),
+          recentTransactions[recentTransactions.length - k + i],
+        ),
+      );
     }
 
     return LineChartData(
@@ -198,7 +183,6 @@ class _LineGraphTotalState extends State<LineGraphTotal> {
           spots: spotList,
           isCurved: true,
           colors: gradientColors,
-          //barWidth: 2,
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: true,
@@ -207,6 +191,45 @@ class _LineGraphTotalState extends State<LineGraphTotal> {
             show: true,
             colors:
                 gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Izgradi Widget tree
+  @override
+  Widget build(BuildContext context) {
+    _walletsSnapshot = context.watch<QuerySnapshot>();
+    _transactionData = fetchTransactionData();
+
+    return Stack(
+      children: <Widget>[
+        AspectRatio(
+          aspectRatio: 1.70,
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  right: 18.0, left: 12.0, top: 12, bottom: 12),
+              child: FutureBuilder<PredictionApiResponse>(
+                  future:
+                      fetchPrediction(_transactionData[0], _transactionData[1]),
+                  builder: (context, snapshot) {
+                    /* 
+                    *  Ovisno o stanju komunikacije s API-jem, prikaži 
+                    *  indikator za učitavanje ili ikonu greške.
+                    */
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
+                        return LineChart(mainData(snapshot.data));
+                      }
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    return Center(
+                      child: Icon(Icons.error),
+                    );
+                  }),
+            ),
           ),
         ),
       ],

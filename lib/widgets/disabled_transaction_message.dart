@@ -1,3 +1,8 @@
+/// Widget s transaction porukom
+///
+/// Poruka koja se prikazuje ako korisnik nema dovoljan broj
+/// novčanika za dodavanj transakcija.
+
 import 'package:flutter/material.dart';
 
 class DisabledTransactionMessage extends StatefulWidget {
@@ -8,6 +13,7 @@ class DisabledTransactionMessage extends StatefulWidget {
 
 class _DisabledTransactionMessageState
     extends State<DisabledTransactionMessage> {
+  // Izgradi Widget tree
   @override
   Widget build(BuildContext context) {
     return Padding(

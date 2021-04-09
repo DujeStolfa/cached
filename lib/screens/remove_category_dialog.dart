@@ -1,3 +1,8 @@
+/// Dijaloški okvir za brisanje kategorija
+///
+/// Dugim pritiskom na kategoriju, korisniku se prikazuje okvir
+/// pomoću kojeg potvrđuje brisanje odabrane kategorije.
+
 import 'package:aplikacija/services/auth_service.dart';
 import 'package:aplikacija/services/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +21,7 @@ class RemoveCategoryDialog extends StatefulWidget {
 }
 
 class _RemoveCategoryDialogState extends State<RemoveCategoryDialog> {
+  // Izgradi Widget tree
   @override
   Widget build(BuildContext context) {
     return Scaffold(

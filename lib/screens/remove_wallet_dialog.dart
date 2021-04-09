@@ -1,3 +1,8 @@
+/// Dijaloški okvir za brisanje novčanika
+///
+/// Dugim pritiskom na novčanik, korisniku se prikazuje okvir
+/// pomoću kojeg potvrđuje brisanje odabranog novčanika.
+
 import 'package:aplikacija/models/wallet_model.dart';
 import 'package:aplikacija/services/auth_service.dart';
 import 'package:aplikacija/services/firestore_service.dart';
@@ -17,6 +22,7 @@ class RemoveWalletDialog extends StatefulWidget {
 }
 
 class _RemoveWalletDialogState extends State<RemoveWalletDialog> {
+  // Izgradi Widget tree
   @override
   Widget build(BuildContext context) {
     return Scaffold(

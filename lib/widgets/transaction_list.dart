@@ -1,3 +1,9 @@
+/// Popis transakcija
+///
+/// Prikazuje sve transakcije odabranog novčanika kao listu widgeta
+/// ExpansionPanel. Upravlja proširivanjem, zatvaranjem, mijenjanjem
+/// i brisanjem transakcija.
+
 import 'package:aplikacija/models/main_model.dart';
 import 'package:aplikacija/models/transaction_model.dart' as TransactionModel;
 import 'package:aplikacija/models/wallet_model.dart';
@@ -20,6 +26,7 @@ class TransactionList extends StatefulWidget {
 }
 
 class _TransactionListState extends State<TransactionList> {
+  // Izgradi Widget tree
   @override
   Widget build(BuildContext context) {
     QuerySnapshot walletsSnapshot = context.watch<QuerySnapshot>();
@@ -43,8 +50,6 @@ class _TransactionListState extends State<TransactionList> {
                 currentTransaction.isExpanded = !isExpanded;
                 service.updateTransaction(
                     currentTransaction, currentUser, _currentWallet);
-                print(_transactions[index].isExpanded);
-                print(isExpanded);
               });
             },
             children: _transactions.map<ExpansionPanel>(
@@ -70,6 +75,10 @@ class _TransactionListState extends State<TransactionList> {
                     ),
                     key: Key(transaction.id),
                     onDismissed: (direction) {
+                      /*
+                      * Izbriši transakciju s popisa i pozovi Firestore servis
+                      * da je izbriše iz baze podataka.
+                      */
                       setState(() {
                         widget.selectedWallet.removeTransaction(transaction.id);
                         service.removeTransaction(
@@ -82,6 +91,7 @@ class _TransactionListState extends State<TransactionList> {
                     child: InkWell(
                       splashColor: Colors.blue.withAlpha(30),
                       onLongPress: () {
+                        // Otvori dijaloški okvir za promjenu opisa transakcije
                         setState(() {
                           Navigator.of(context).push(PageRouteBuilder(
                               opaque: false,

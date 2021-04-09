@@ -26,12 +26,15 @@ class Transaction {
     this.isExpanded = true,
   });
 
+  // Dohvati datum transakcije u DateTime formatu
   DateTime get dateTimeDate =>
       DateTime.fromMillisecondsSinceEpoch(this.date.millisecondsSinceEpoch);
 
+  // Dohvati datum transakcije kao listu oblika [godina, mjesec, dan]
   List<int> get listDate =>
       [this.dateTimeDate.year, this.dateTimeDate.month, this.dateTimeDate.day];
 
+  // Dohvati datum transakcije kao broj oblika yyyymmdd
   int get intDate {
     int yearInt = this.dateTimeDate.year;
     int monthInt = this.dateTimeDate.month;
@@ -47,6 +50,7 @@ class Transaction {
     return int.parse(year + month + day);
   }
 
+  // Pretvori datum transakcije u String oblika "dd. mm. yyyy.""
   String stringDate() {
     DateTime displayDate = this.dateTimeDate;
 
@@ -57,6 +61,7 @@ class Transaction {
     return '$day. $month. $year.';
   }
 
+  // Pretvori transakciju u Map objekt
   Map<String, dynamic> convertTransaction() {
     return {
       'value': this.value,

@@ -45,6 +45,7 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
     super.initState();
   }
 
+  // Osiguraj ispravnost unesenih podataka i dodaj transakciju u bazu podataka
   void _submit(dynamic service, User user, List categories) {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -74,9 +75,8 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
     }
   }
 
+  // Otvori izbornik za odabir datuma transakcije
   void _selectDate(BuildContext context) async {
-    // otvara datepicker
-
     final DateTime selected = await showDatePicker(
         context: context,
         initialDate: _selectedDate,
@@ -90,12 +90,14 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
     }
   }
 
+  // Promijeni vrstu transakcije
   void _setExpense(bool value) {
     setState(() {
       _selectedExpense = value;
     });
   }
 
+  // Postavi izbornik za odabir novčanika
   Widget _buildWalletDropdown() {
     return Row(
       children: [
@@ -126,6 +128,7 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
     );
   }
 
+  // Prikaži popis kategorija u obliku MD Chipova
   Widget _buildChips(List<dynamic> categories) {
     List<Widget> chips = [];
 
@@ -183,19 +186,22 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
     );
   }
 
+  //Izgradi Widget tree
   @override
   Widget build(BuildContext context) {
     _walletsSnapshot = context.watch<QuerySnapshot>();
+
     Map<String, dynamic> userSnapshotData =
         context.watch<DocumentSnapshot>().data();
     User currentUser = context.watch<AuthenticationService>().currentUser;
-
     dynamic service = context.watch<FirestoreService>();
 
+    // Dohvati listu svih korisniovih novčanika
     _wallets = _walletsSnapshot.docs
         .map((element) => model.createWallet(element.data()))
         .toList();
 
+    // Dohvati listu svih korisniovih kategorija
     List<dynamic> categories = userSnapshotData['categories'];
 
     return Scaffold(

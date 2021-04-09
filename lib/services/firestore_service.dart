@@ -1,3 +1,9 @@
+/// Servis za Cloud Firestore bazu podataka
+///
+/// Dohvaćanje podataka iz baze i spremanje podataka u bazu
+/// u potpunosti se odvija preko ovog servisa. Osigurava
+/// pravilno i konzistentno formatiranje podataka u bazi.
+
 import 'package:aplikacija/models/main_model.dart';
 import 'package:aplikacija/models/wallet_model.dart';
 import 'package:aplikacija/services/auth_service.dart';
@@ -12,11 +18,13 @@ class FirestoreService {
 
   FirestoreService(this._firestore);
 
+  // Stream pružatelj kolekcije podataka trenutno prijavljenog korisnika
   Stream<DocumentSnapshot> collectionStream(BuildContext context) {
     String uid = context.read<AuthenticationService>().currentUser.uid;
     return _firestore.collection('users').doc(uid).snapshots();
   }
 
+  // Stream pružatelj dokumenata s podacima o korisnikoivm novčanicima
   Stream<QuerySnapshot> documentStream(BuildContext context) {
     String uid = context.read<AuthenticationService>().currentUser.uid;
     return _firestore
@@ -26,6 +34,7 @@ class FirestoreService {
         .snapshots();
   }
 
+  // Stvara novog korisnika i dodaje ga u bazu
   Future<void> createUser(User user) {
     Map<String, dynamic> data = {
       'categories': [],
@@ -40,6 +49,7 @@ class FirestoreService {
     }).catchError((error) => print(error));
   }
 
+  // Stvara novi novčanik i dodaje ga u bazu
   Future<void> addWallet(Wallet wallet, User user, List walletNames) {
     Map<String, dynamic> walletData = wallet.toFirestoreMap();
 
@@ -60,6 +70,7 @@ class FirestoreService {
         .catchError((error) => print("Failed to update wallet: $error"));
   }
 
+  // Briše odabrani novčanik iz baze
   void removeWallet(User user, Wallet wallet, List<dynamic> walletNames) {
     walletNames.remove(wallet.name);
 
@@ -78,6 +89,7 @@ class FirestoreService {
         .catchError((error) => print("Failed to remove wallet"));
   }
 
+  // Dodaje novu transakciju u odabrani novčanik
   Future<void> addTransaction(
       Map<String, dynamic> data, Wallet wallet, User user) {
     wallet.addTransaction(model.createTransaction(data));
@@ -97,6 +109,7 @@ class FirestoreService {
         .catchError((error) => print('Failed to add transaciton: $error'));
   }
 
+  // Briše odabranu transakciju iz novčanika
   void removeTransaction(List<transactionModel.Transaction> transactionsList,
       User user, Wallet wallet) {
     List<Map> updatedTransactions = transactionsList
@@ -114,6 +127,7 @@ class FirestoreService {
         .catchError((error) => print('Failed to remove transaciton: $error'));
   }
 
+  // Dodaje novu kategoriju u korisnikovu listu kategorija
   void addCategory(User user, List<dynamic> categories, String category) {
     categories.add(category);
 
@@ -125,6 +139,7 @@ class FirestoreService {
         .catchError((error) => print('Failed to add a category: $error'));
   }
 
+  // Briše kategoriju iz korisnikove liste kategorija
   void removeCategory(User user, List<dynamic> categories, int index) {
     categories.removeAt(index);
 
@@ -136,6 +151,7 @@ class FirestoreService {
         .catchError((error) => print('Failed to remove a category: $error'));
   }
 
+  // Mijenja opis odabrane transakcije
   void updateTransactionDescription(
       String transactionId, String description, User user, Wallet wallet) {
     List<Map> updatedTransactions = [];
@@ -161,6 +177,7 @@ class FirestoreService {
         .catchError((error) => print('Failed to update transaction'));
   }
 
+  // Mijenja stanje odabrane transakcije
   void updateTransaction(transactionModel.Transaction updatedTransaction,
       User user, Wallet wallet) {
     List<Map> updatedTransactions = [];

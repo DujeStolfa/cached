@@ -1,3 +1,8 @@
+/// Main datoteka aplikacije
+///
+/// Postavlja ID-jeve za pristupanje pojedinim ekranima, pružatelje
+/// streamova i pokreće autentifikacijski wrapper.
+
 import 'package:aplikacija/models/main_model.dart';
 import 'package:aplikacija/screens/error_screen.dart';
 import 'package:aplikacija/screens/home_screen.dart';
@@ -28,17 +33,19 @@ class MyApp extends StatelessWidget {
     return FutureBuilder(
       future: _initialization,
       builder: (context, snapshot) {
+        // U slučaju greške prikaži ekran s greškom
         if (snapshot.hasError) {
           return ErrorScreen();
         }
         if (snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
-            title: 'Flutter App',
+            title: 'Cached',
             debugShowCheckedModeBanner: false,
             home: MyHomeScreen(),
           );
         }
 
+        // Pri učitavanju prikaži indikator
         return LoadingScreen();
       },
     );
@@ -54,6 +61,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
+      // Pokreni sve potrebene Providere
       providers: [
         Provider<AuthenticationService>(
           create: (_) => AuthenticationService(FirebaseAuth.instance),
@@ -66,16 +74,12 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
           create: (_) => FirestoreService(FirebaseFirestore.instance),
         ),
         StreamProvider(
-          create: (context) => context.read<FirestoreService>().collectionStream(
-              context /*
-                    context.read<AuthenticationService>().currentUser.uid,*/
-              ),
+          create: (context) =>
+              context.read<FirestoreService>().collectionStream(context),
         ),
         StreamProvider(
-          create: (context) => context.read<FirestoreService>().documentStream(
-              context /*
-                context.read<AuthenticationService>().currentUser.uid,*/
-              ),
+          create: (context) =>
+              context.read<FirestoreService>().documentStream(context),
         ),
         ChangeNotifierProvider<MainModel>(
           create: (context) => model,
@@ -91,6 +95,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
         ),
         home: AuthenticationWrapper(),
         routes: {
+          // Postavi rute u aplikaciji
           LoginScreen.id: (context) => LoginScreen(),
           SignupScreen.id: (context) => SignupScreen(),
           HomeScreen.id: (context) => HomeScreen(),

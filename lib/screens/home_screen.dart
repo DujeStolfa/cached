@@ -27,104 +27,131 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  //Izgradi Widget tree
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(centerTitle: true, elevation: 0.0, actions: <Widget>[
+      backgroundColor: Theme.of(context).primaryColor,
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0.0,
+        actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.logout),
-              iconSize: 30.0,
-              color: Colors.white,
-              onPressed: () {
-                context.read<AuthenticationService>().signOut();
-              })
-        ]),
-        floatingActionButton: SpeedDial(
-          animatedIconTheme: IconThemeData(size: 22.0),
-          child: Icon(Icons.add),
-          closeManually: false,
-          curve: Curves.bounceIn,
-          overlayColor: Colors.black,
-          overlayOpacity: 0.1,
-          tooltip: 'Speed Dial',
-          heroTag: 'speed-dial-hero-tag',
-          backgroundColor: Theme.of(context).accentColor,
-          foregroundColor: Colors.white,
-          elevation: 4.0,
-          shape: CircleBorder(),
-          children: [
-            SpeedDialChild(
-              child: Icon(AppIcons.transaction),
-              backgroundColor: Theme.of(context).accentColor,
-              label: 'Transaction',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => Navigator.pushNamed(context, 'new_transaction'),
+            icon: Icon(Icons.logout),
+            iconSize: 30.0,
+            color: Colors.white,
+            onPressed: () {
+              context.read<AuthenticationService>().signOut();
+            },
+          )
+        ],
+      ),
+      // Postavi akcijski gumb za dodavanje transakcija i transfera
+      floatingActionButton: SpeedDial(
+        animatedIconTheme: IconThemeData(size: 22.0),
+        child: Icon(Icons.add),
+        closeManually: false,
+        curve: Curves.bounceIn,
+        overlayColor: Colors.black,
+        overlayOpacity: 0.1,
+        tooltip: 'Speed Dial',
+        heroTag: 'speed-dial-hero-tag',
+        backgroundColor: Theme.of(context).accentColor,
+        foregroundColor: Colors.white,
+        elevation: 4.0,
+        shape: CircleBorder(),
+        children: [
+          SpeedDialChild(
+            child: Icon(AppIcons.transaction),
+            backgroundColor: Theme.of(context).accentColor,
+            label: 'Transaction',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () => Navigator.pushNamed(context, 'new_transaction'),
+          ),
+          SpeedDialChild(
+            child: Icon(AppIcons.transfer),
+            backgroundColor: Theme.of(context).accentColor,
+            label: 'Transfer',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () => Navigator.pushNamed(context, 'new_transfer'),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(40.0, 60.0, 40.0, 20.0),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                'Dashboard',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 40.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ),
-            SpeedDialChild(
-              child: Icon(AppIcons.transfer),
-              backgroundColor: Theme.of(context).accentColor,
-              label: 'Transfer',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => Navigator.pushNamed(context, 'new_transfer'),
+          ),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.only(topLeft: Radius.circular(35.0)),
+                  color: Colors.white),
+              child: ListView(
+                children: [
+                  Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 30.0, vertical: 14.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Wallets',
+                              style: TextStyle(
+                                color: Colors.blueGrey,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      WalletSelector(),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 30.0, vertical: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Total balance trend',
+                              style: TextStyle(
+                                color: Colors.blueGrey,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GraphList(),
+                      SizedBox(
+                        height: 25,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-        body: Column(
-          children: [
-            Padding(
-                padding: EdgeInsets.fromLTRB(40.0, 60.0, 40.0, 20.0),
-                child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Text('Dashboard',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 40.0,
-                            fontWeight: FontWeight.w700)))),
-            Expanded(
-                child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.only(topLeft: Radius.circular(35.0)),
-                        color: Colors.white),
-                    child: ListView(children: [
-                      Column(children: [
-                        Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 30.0, vertical: 14.0),
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Wallets',
-                                      style: TextStyle(
-                                          color: Colors.blueGrey,
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 1.0))
-                                ])),
-                        WalletSelector(),
-                        Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 30.0, vertical: 10.0),
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Total balance trend',
-                                      style: TextStyle(
-                                          color: Colors.blueGrey,
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 1.0))
-                                ])),
-                        GraphList(),
-                        SizedBox(
-                          height: 25,
-                        )
-                      ]),
-                    ])))
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

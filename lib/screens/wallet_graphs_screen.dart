@@ -1,4 +1,4 @@
-/// Ekran s fijagramima pojedinog novčanika
+/// Ekran s dijagramima pojedinog novčanika
 ///
 /// Korisniku je prikazan naslov ekrana, dijagram salda
 /// odabranog novčanika i dijagram transakcija tog novčanika.
@@ -23,6 +23,30 @@ class WalletGraphsScreen extends StatefulWidget {
 }
 
 class _WalletGraphsScreenState extends State<WalletGraphsScreen> {
+  // Okvir u kojem se nalazi dijagram
+  Widget _floatingContainer(List<Widget> children) {
+    return Container(
+      width: MediaQuery.of(context).size.width - 30,
+      padding: EdgeInsets.all(20),
+      margin: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 5,
+              blurRadius: 8,
+              offset: Offset(0, 8),
+            ),
+          ]),
+      child: Column(
+        children: children,
+      ),
+    );
+  }
+
+  // Izgradi Widget tree
   @override
   Widget build(BuildContext context) {
     QuerySnapshot walletsSnapshot = context.watch<QuerySnapshot>();
@@ -72,28 +96,6 @@ class _WalletGraphsScreenState extends State<WalletGraphsScreen> {
           ],
         ),
       ]),
-    );
-  }
-
-  Widget _floatingContainer(List<Widget> children) {
-    return Container(
-      width: MediaQuery.of(context).size.width - 30,
-      padding: EdgeInsets.all(20),
-      margin: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              spreadRadius: 5,
-              blurRadius: 8,
-              offset: Offset(0, 8),
-            ),
-          ]),
-      child: Column(
-        children: children,
-      ),
     );
   }
 }

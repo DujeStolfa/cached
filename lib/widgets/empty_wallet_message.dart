@@ -1,6 +1,11 @@
+/// Widget sa porukom za novčanik
+///
+/// Poruka koja se prikazuje ako novčanik nema unesenih transakcija.
+
 import 'package:flutter/material.dart';
 
 class EmptyWalletMessage extends StatelessWidget {
+  // Izgradi Widget tree
   @override
   Widget build(BuildContext context) {
     return Container(

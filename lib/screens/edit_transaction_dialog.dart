@@ -29,6 +29,7 @@ class _EditTransactionDialogState extends State<EditTransactionDialog> {
 
   String _description;
 
+  // Osiguraj ispravnost unesenih podataka i vrati se na prethodni Screen
   void _submit(FirestoreService service, User currentUser) {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -40,6 +41,7 @@ class _EditTransactionDialogState extends State<EditTransactionDialog> {
     }
   }
 
+  //Izgradi Widget tree
   @override
   Widget build(BuildContext context) {
     User currentUser = context.watch<AuthenticationService>().currentUser;

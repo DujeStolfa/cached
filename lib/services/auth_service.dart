@@ -1,3 +1,8 @@
+/// Serivs za autentifikaciju
+///
+/// Omogućuje prijavu, odjavu i registraciju korisnika te olakšava
+/// rukovanje sa Firebaseovim autentifikacijskim uslugama.
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthenticationService {
@@ -5,14 +10,18 @@ class AuthenticationService {
 
   AuthenticationService(this._firebaseAuth);
 
+  // Prati promjene u autentifikacijskom stanju korisnika
   Stream<User> get authStateChanges => _firebaseAuth.authStateChanges();
 
+  // Dohvati trenutno prijavljenog korisnika
   User get currentUser => _firebaseAuth.currentUser;
 
+  // Odjavi korisnika
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
   }
 
+  // Prijavi korisnika
   Future<dynamic> signIn({String email, String password}) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
@@ -24,6 +33,7 @@ class AuthenticationService {
     }
   }
 
+  // Registriraj korisnika
   Future<String> signUp({String email, String password}) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(

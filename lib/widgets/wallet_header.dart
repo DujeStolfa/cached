@@ -1,10 +1,12 @@
+/// Zaglavlje novčanika
+///
+/// Widget na kojem je prikazano ime i stanje odabranog novčanika te
+/// gumb za otvaranje ekrana s njegovim dijagramima.
+
 import 'package:aplikacija/models/main_model.dart';
 import 'package:aplikacija/models/wallet_model.dart';
 import 'package:aplikacija/screens/wallet_graphs_screen.dart';
-import 'package:aplikacija/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 class WalletHeader extends StatefulWidget {

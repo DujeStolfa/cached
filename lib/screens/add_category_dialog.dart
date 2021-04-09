@@ -15,12 +15,14 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
 
   String _category;
 
+  // Osiguraj ispravnost unesenih podataka i vrati se na prethodni Screen
   void _submit() {
     _formKey.currentState.save();
 
     Navigator.pop(context, _category);
   }
 
+  //Izgradi Widget tree
   @override
   Widget build(BuildContext context) {
     return Scaffold(

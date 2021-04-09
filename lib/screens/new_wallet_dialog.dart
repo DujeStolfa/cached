@@ -25,6 +25,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   String _currency = 'HRK';
   double _balance = 0.0;
 
+  // Osiguraj ispravnost unesenih podataka i dodaj novčanik u bazu podataka
   void _submit(FirestoreService service, User currentUser, List walletNames) {
     _formKey.currentState.save();
 
@@ -45,6 +46,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
     Navigator.pop(context);
   }
 
+  // Izgradi Widget tree
   @override
   Widget build(BuildContext context) {
     User currentUser = context.watch<AuthenticationService>().currentUser;

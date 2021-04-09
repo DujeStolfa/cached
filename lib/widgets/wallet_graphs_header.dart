@@ -1,3 +1,7 @@
+/// Zaglavlje dijagrama
+///
+/// Kartica s imenom novčanika, prikazana u zaglavlju ekrana s dijagramima.
+
 import 'package:aplikacija/models/main_model.dart';
 import 'package:aplikacija/models/wallet_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,6 +20,7 @@ class WalletGraphsHeader extends StatefulWidget {
 class _WalletGraphsHeaderState extends State<WalletGraphsHeader> {
   Wallet _currentWallet;
 
+  // Izgradi Widget tree
   @override
   Widget build(BuildContext context) {
     QuerySnapshot walletsSnapshot = widget.snapshot;

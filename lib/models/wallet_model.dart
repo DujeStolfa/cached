@@ -26,6 +26,7 @@ class Wallet extends Equatable {
   @override
   List<Object> get props => [id];
 
+  // Dodaj transakciju u listu transakcija
   void addTransaction(Transaction transaction) {
     int selectedDate = transaction.intDate;
 
@@ -34,7 +35,7 @@ class Wallet extends Equatable {
     /* 
     * Izračunaj indeks u listi transakcija na kojem bi se 
     * trebala nalaziti prosljeđena transakcija da bi ta lista 
-    * i dalje bila sortirana.
+    * i dalje bila sortirana silazno.
     */
     for (var i = 0; i < this.transactions.length; i++) {
       int dateAtIndex = this.transactions[i].intDate;
@@ -45,31 +46,11 @@ class Wallet extends Equatable {
       } else {
         index = i + 1;
       }
-
-      /*print(dateAtIndex);
-
-      print(selectedDate);
-      print(index);
-      print('');
-
-      if (dateAtIndex[0] < selectedDate[0]) {
-        index = i;
-      } else {
-        if (dateAtIndex[1] < selectedDate[1]) {
-          index = i;
-        } else {
-          if (dateAtIndex[2] < selectedDate[2]) {
-            index = i;
-          } else {
-            index = i;
-            break;
-          }
-        }
-      }*/
     }
 
     transactions.insert(index, transaction);
 
+    // Prilagodi stanje novčanika
     if (transaction.expense) {
       balance -= transaction.value;
     } else {
@@ -77,6 +58,7 @@ class Wallet extends Equatable {
     }
   }
 
+  // Izbriši transakciju iz liste transakcija
   Transaction removeTransaction(String transactionId) {
     int selectedIndex = this.indexFromId(transactionId);
     Transaction selectedTransaction = this.transactions[selectedIndex];
@@ -85,6 +67,7 @@ class Wallet extends Equatable {
       this.transactions.removeAt(selectedIndex);
     }
 
+    // Prilagodi stanje novčanika
     if (selectedTransaction.expense) {
       this.balance += selectedTransaction.value;
     } else {
@@ -94,6 +77,7 @@ class Wallet extends Equatable {
     return selectedTransaction;
   }
 
+  // Dohvati indeks na kojem se nalazi transakcija sa zadanim ID-jem
   int indexFromId(String id) {
     for (var i = 0; i < this.transactions.length; i++) {
       if (transactions[i].id == id) {
@@ -103,6 +87,7 @@ class Wallet extends Equatable {
     return -1;
   }
 
+  // Pretvori novčanik u mapu prilagođenu Firestore bazi podataka
   Map<String, dynamic> toFirestoreMap() {
     return {
       'id': this.id,
@@ -113,12 +98,14 @@ class Wallet extends Equatable {
     };
   }
 
+  // Dohvati opis najnovije transakcije novčanika
   String get lastTransaction {
     Transaction lastTransaction;
     if (this.transactions.length == 0) {
       return 'No recorded transactions';
     }
     lastTransaction = this.transactions[0];
+
     return lastTransaction.expense
         ? '-' +
             lastTransaction.value.toString() +

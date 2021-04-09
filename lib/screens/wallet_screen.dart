@@ -21,6 +21,7 @@ class WalletScreen extends StatefulWidget {
 }
 
 class _WalletScreenState extends State<WalletScreen> {
+  // Izgradi Widget tree
   @override
   Widget build(BuildContext context) {
     QuerySnapshot walletsSnapshot = context.watch<QuerySnapshot>();

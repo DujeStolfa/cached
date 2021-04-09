@@ -1,3 +1,7 @@
+/// Dijagram salda novčanika
+///
+/// Prikazuje ukupno stanje odabranog novčanika nakon svake transakcije.
+
 import 'dart:convert';
 import 'package:aplikacija/models/prediction_api_response.dart';
 import 'package:aplikacija/models/reduced_transaction_model.dart';
@@ -38,40 +42,7 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    _walletsSnapshot = context.watch<QuerySnapshot>();
-    _transactionData = fetchTransactionData();
-
-    return Stack(
-      children: <Widget>[
-        AspectRatio(
-          aspectRatio: 1.5,
-          child: Container(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  right: 18.0, left: 12.0, top: 12, bottom: 12),
-              child: FutureBuilder<PredictionApiResponse>(
-                  future:
-                      fetchPrediction(_transactionData[0], _transactionData[1]),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasData) {
-                        return LineChart(mainData(snapshot.data));
-                      }
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    return Center(
-                      child: Icon(Icons.error),
-                    );
-                  }),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
+  // Dohvati predviđanje s autorskog API-ja
   Future<PredictionApiResponse> fetchPrediction(
       List totalValues, List relativeValues) async {
     http.Response response = await http.post(
@@ -93,6 +64,7 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
     }
   }
 
+  // Dohvati podatke o korisnikovim transakcijama
   List fetchTransactionData() {
     List<ReducedTransaction> transactions = [];
     double currentBalance = 0;
@@ -139,26 +111,29 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
     ];
   }
 
+  // Stvori oznake za ordinatnu os dijagrama
   SideTitles leftTitles(List<double> recentTransactions) {
     return SideTitles(
-        showTitles: true,
-        getTextStyles: (value) => const TextStyle(
-              color: Color(0xff67727d),
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-            ),
-        getTitles: (value) {
-          return value.round().toString();
-        },
-        reservedSize: 28,
-        margin: 12,
-        interval: (recentTransactions.reduce(max) +
-                min(recentTransactions.reduce(max) * 1.01, 100) -
-                recentTransactions.reduce(min) +
-                min(recentTransactions.reduce(min) * 0.99, 100)) /
-            5);
+      showTitles: true,
+      getTextStyles: (value) => const TextStyle(
+        color: Color(0xff67727d),
+        fontWeight: FontWeight.bold,
+        fontSize: 12,
+      ),
+      getTitles: (value) {
+        return value.round().toString();
+      },
+      reservedSize: 28,
+      margin: 12,
+      interval: (recentTransactions.reduce(max) +
+              min(recentTransactions.reduce(max) * 1.01, 100) -
+              recentTransactions.reduce(min) +
+              min(recentTransactions.reduce(min) * 0.99, 100)) /
+          5,
+    );
   }
 
+  // Prilagodi sve podatke u format za prikazivanje na dijagram
   LineChartData mainData(PredictionApiResponse prediction) {
     List<double> recentTransactions;
 
@@ -226,6 +201,41 @@ class _WalletBalanceGraphState extends State<WalletBalanceGraph> {
             show: true,
             colors:
                 gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Izgradi Widget tree
+  @override
+  Widget build(BuildContext context) {
+    _walletsSnapshot = context.watch<QuerySnapshot>();
+    _transactionData = fetchTransactionData();
+
+    return Stack(
+      children: <Widget>[
+        AspectRatio(
+          aspectRatio: 1.5,
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  right: 18.0, left: 12.0, top: 12, bottom: 12),
+              child: FutureBuilder<PredictionApiResponse>(
+                  future:
+                      fetchPrediction(_transactionData[0], _transactionData[1]),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
+                        return LineChart(mainData(snapshot.data));
+                      }
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    return Center(
+                      child: Icon(Icons.error),
+                    );
+                  }),
+            ),
           ),
         ),
       ],

@@ -13,11 +13,13 @@ class MainModel extends ChangeNotifier {
 
   MainModel(this.users);
 
+  // Dodaj novu transakciju
   void addTransaction(index, walletID, transaction) {
     users[index].wallets[walletID].addTransaction(transaction);
     notifyListeners();
   }
 
+  // Stvori objekt klase Transaction iz mape
   Transaction createTransaction(Map map) {
     return Transaction(
       map['value'].toDouble(),
@@ -30,6 +32,7 @@ class MainModel extends ChangeNotifier {
     );
   }
 
+  // Stvori objekt klase Wallet iz mape
   Wallet createWallet(Map map) {
     List<Transaction> transactionList = [];
     try {

@@ -1,9 +1,13 @@
+/// Popis novčanika
+///
+/// Izbornik na kojem su sažeto prikazani podaci o svakom korisnikovom
+/// novčaniku i gumb za dodavanje novih novčanika.
+
 import 'package:aplikacija/models/main_model.dart';
 import 'package:aplikacija/models/wallet_model.dart';
 import 'package:aplikacija/screens/new_wallet_dialog.dart';
 import 'package:aplikacija/screens/remove_wallet_dialog.dart';
 import 'package:aplikacija/screens/wallet_screen.dart';
-import 'package:aplikacija/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +18,7 @@ class WalletSelector extends StatefulWidget {
 }
 
 class _WalletSelectorState extends State<WalletSelector> {
+  // Izgradi Widget tree
   @override
   Widget build(BuildContext context) {
     DocumentSnapshot usersSnapshot = context.watch<DocumentSnapshot>();
@@ -28,12 +33,18 @@ class _WalletSelectorState extends State<WalletSelector> {
         scrollDirection: Axis.horizontal,
         itemCount: walletCount + 1,
         itemBuilder: (BuildContext context, int index) {
+          // Za svaki novčanik stvori njegovu karticu
+
           if (index < walletCount) {
+            /*
+            * Ako se ne radi o zadnjoj kartici
+            * dohvati trenutni novčanik iz baze
+            */
             Wallet currentWallet =
                 model.createWallet(walletsSnapshot.docs[index].data());
 
+            // Podaci za prikazivanje
             String name = currentWallet.name;
-            String currency = currentWallet.currency;
             String balance = currentWallet.balance.floor().toString();
             String lastTransaction = currentWallet.lastTransaction;
 
@@ -135,6 +146,10 @@ class _WalletSelectorState extends State<WalletSelector> {
               ),
             );
           } else {
+            /*
+            * Inače, neka zadnja kartica bude gumb za dodavanje
+            * novog novčanika.
+            */
             return Padding(
               padding: EdgeInsets.only(left: 35.0, bottom: 15.0, right: 35.0),
               child: Card(

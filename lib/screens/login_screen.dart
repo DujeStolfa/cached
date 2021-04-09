@@ -21,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   String _email, _password, _error;
 
+  // Osiguraj ispravnost unesenih podataka i prijavi korisnika
   _submit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -30,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
             .read<AuthenticationService>()
             .signIn(email: _email.trim(), password: _password.trim());
       } catch (e) {
+        // U slučaju pogreške prikaži odgovarajuću poruku
         setState(() {
           _error = e.message;
         });
@@ -37,6 +39,44 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  // Okvir za upozorenje o pogreškama
+  Widget errorAlert() {
+    if (_error != null) {
+      return Container(
+        color: Colors.amberAccent,
+        width: double.infinity,
+        padding: EdgeInsets.all(8),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Icon(Icons.error_outline),
+            ),
+            Expanded(
+              child: AutoSizeText(
+                _error,
+                maxLines: 3,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  _error = null;
+                });
+              },
+              icon: Icon(
+                Icons.close,
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return SizedBox(height: 0);
+    }
+  }
+
+  //Izgradi Widget tree
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -92,41 +132,5 @@ class _LoginScreenState extends State<LoginScreen> {
                 ]))
           ])),
     );
-  }
-
-  Widget errorAlert() {
-    if (_error != null) {
-      return Container(
-        color: Colors.amberAccent,
-        width: double.infinity,
-        padding: EdgeInsets.all(8),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Icon(Icons.error_outline),
-            ),
-            Expanded(
-              child: AutoSizeText(
-                _error,
-                maxLines: 3,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  _error = null;
-                });
-              },
-              icon: Icon(
-                Icons.close,
-              ),
-            ),
-          ],
-        ),
-      );
-    } else {
-      return SizedBox(height: 0);
-    }
   }
 }

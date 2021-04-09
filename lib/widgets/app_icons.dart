@@ -1,3 +1,7 @@
+/// Widget za ikone
+///
+/// Omogućuje prikazivanje autorskih ikona za transakciju i transfer.
+
 import 'package:flutter/widgets.dart';
 
 class AppIcons {
