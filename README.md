@@ -4,5 +4,6 @@ Mobile app used to track daily expenditures. It works alongside my [ML API](http
 
 ## Project Documentation (Croatian)
 
-You can read more about this project [here](https://drive.google.com/file/d/1q5ThUs5B2fYeTO72ujOofnCHV1Ppbyho/view?usp=sharing).
+You can read more about this project here: [dokumentacija-cached.pdf](https://github.com/DujeStolfa/cached/files/7761924/dokumentacija-cached.pdf)
+
 
